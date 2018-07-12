@@ -1,0 +1,38 @@
+{
+    "name": "sam-it/yii2-urlsigner",
+    "description": "Secure URL signing and validation for the Yii2 framework",
+    "type": "yii2-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sam Mousa",
+            "email": "sam@mousa.nl"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "SamIT\\Yii2\\MariaDb\\" : "src/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.9",
+        "yiisoft/yii2-dev": "2.0.15.1",
+        "phpunit/phpunit": "^7.2"
+    },
+    "scripts": {
+        "test": "docker-compose -f tests/docker-compose.yml run --rm phpunit",
+        "dc": "docker-compose -f tests/docker-compose.yml",
+        "test-with-cc": "docker-compose -f tests/docker-compose.yml run --rm phpunit-coverage",
+        "lint": "vendor/bin/php-cs-fixer fix --dry-run --verbose --diff",
+        "lint-fix": "vendor/bin/php-cs-fixer fix --verbose"
+    },
+    "config": {
+        "process-timeout": 600
+    }
+}

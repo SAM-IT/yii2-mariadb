@@ -1,0 +1,23 @@
+language: php
+php:
+  - '7.1'
+  - '7.2'
+services:
+  - docker
+env:
+  global:
+    - COVERAGE=true TEST_COMMAND="composer test-with-cc"
+matrix:
+  fast_finish: true
+  include:
+    - php: '7.1'
+      env: COVERAGE=false TEST_COMMAND="composer lint"
+before_install :
+  - phpenv config-rm xdebug.ini
+install:
+  - travis_retry composer install
+script:
+  - $TEST_COMMAND
+after_script:
+  - if [[ "$COVERAGE" = true ]]; then wget https://scrutinizer-ci.com/ocular.phar; fi
+  - if [[ "$COVERAGE" = true ]]; then php ocular.phar code-coverage:upload --format=php-clover tests/_output/coverage.xml; fi

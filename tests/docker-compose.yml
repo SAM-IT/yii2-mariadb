@@ -1,0 +1,42 @@
+version: '2'
+services:
+  phpunit-coverage:
+    image: sammousa/php-with-extensions
+    user: "${UID}:${GID}"
+    working_dir: /project
+    volumes:
+    - ./../:/project:ro
+    - ./coverage:/coverage
+    environment:
+    - TEST_RUNTIME_PATH=/tmp/runtime
+    depends_on:
+    - mariadb
+    entrypoint: ["phpdbg", "-qrr", "vendor/bin/phpunit", "--coverage-html", "/coverage", "--coverage-xml", "/coverage"]
+  phpunit:
+    image: sammousa/php-with-extensions
+    user: "${UID}:${GID}"
+    working_dir: /project
+    volumes:
+      - ./../:/project:ro
+    environment:
+      - TEST_RUNTIME_PATH=/tmp/runtime
+    depends_on:
+      - mariadb
+    entrypoint: ["vendor/bin/phpunit"]
+
+  mariadb:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: yiitest
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - mariadb
+    environment:
+      PMA_HOST: mariadb
+      PMA_USER: root
+      PMA_PASSWORD: secret
+    ports:
+      - "12345:80"
