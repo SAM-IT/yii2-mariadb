@@ -1,6 +1,6 @@
 {
-    "name": "sam-it/yii2-urlsigner",
-    "description": "Secure URL signing and validation for the Yii2 framework",
+    "name": "sam-it/yii2-mariadb",
+    "description": "MariaDB Driver for Yii2",
     "type": "yii2-extension",
     "license": "MIT",
     "authors": [
