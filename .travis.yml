@@ -16,6 +16,8 @@ before_install :
   - phpenv config-rm xdebug.ini
 install:
   - travis_retry composer install
+before_script:
+  - mysql -e 'CREATE DATABASE yiitest;'
 script:
   - $TEST_COMMAND
 after_script:
