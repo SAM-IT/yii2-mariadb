@@ -6,7 +6,7 @@ addons:
   mariadb: "10.2"
 env:
   global:
-    - COVERAGE=true TEST_COMMAND="phpdbg -qrr vendor/bin/phpunit --coverage-xml coverage.xml"
+    - COVERAGE=true TEST_COMMAND="phpdbg -qrr vendor/bin/phpunit --coverage-clover coverage.xml"
 matrix:
   fast_finish: true
   include:
