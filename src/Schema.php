@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace SamIT\Yii2\MariaDb;
 
-
+use yii\db\Exception;
 use yii\db\Expression;
+use yii\db\TableSchema;
 
 class Schema extends \yii\db\mysql\Schema
 {
@@ -20,10 +21,13 @@ class Schema extends \yii\db\mysql\Schema
 
     private $jsonColumns = [];
 
-    public function getJsonColumns($table)
+    /**
+     * @throws Exception if the table does not exist
+     * @return string[] The column names that are JSON
+     */
+    public function getJsonColumns(TableSchema $table): array
     {
         $sql = $this->getCreateTableSql($table);
-
         $result = [];
 
         $regexp = '/CHECK\s*\(\s*json_valid\(\`(.+)\`\s*\)\s*\)/mi';
@@ -36,10 +40,25 @@ class Schema extends \yii\db\mysql\Schema
         return $result;
     }
 
+    /**
+     * @param TableSchema $table
+     * @throws \Exception
+     * @return bool
+     */
     protected function findColumns($table)
     {
-        // Preload JSON columns by checking SQL.
-        $this->jsonColumns = $this->getJsonColumns($table);
+        try {
+
+            // Preload JSON columns by checking SQL.
+            $this->jsonColumns = $this->getJsonColumns($table);
+        } catch (Exception $e) {
+            $previous = $e->getPrevious();
+            if ($previous instanceof \PDOException && \strpos($previous->getMessage(), 'SQLSTATE[42S02') !== false) {
+                // table does not exist
+                // https://dev.mysql.com/doc/refman/5.5/en/error-messages-server.html#error_er_bad_table_error
+                return false;
+            }
+        }
         return parent::findColumns($table);
     }
 
