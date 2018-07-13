@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 class CommandTest extends \yiiunit\framework\db\mysql\CommandTest
 {
-    public function testBindParamValue()
+    public function testBindParamValue(): void
     {
         if (\defined('HHVM_VERSION') && $this->driverName === 'pgsql') {
             $this->markTestSkipped('HHVMs PgSQL implementation has some specific behavior that breaks some parts of this test.');
@@ -29,7 +29,7 @@ class CommandTest extends \yiiunit\framework\db\mysql\CommandTest
         $sql = 'SELECT [[name]] FROM {{customer}} WHERE [[email]] = :email';
         $command = $db->createCommand($sql);
         $command->bindParam(':email', $email);
-        $this->assertEquals($name, $command->queryScalar());
+        $this->assertSame($name, $command->queryScalar());
 
         $sql = <<<'SQL'
 INSERT INTO {{type}} ([[int_col]], [[char_col]], [[float_col]], [[blob_col]], [[numeric_col]], [[bool_col]])
@@ -37,7 +37,7 @@ INSERT INTO {{type}} ([[int_col]], [[char_col]], [[float_col]], [[blob_col]], [[
 SQL;
         $command = $db->createCommand($sql);
         $intCol = 123;
-        $charCol = str_repeat('abc', 33) . 'x'; // a 100 char string
+        $charCol = \str_repeat('abc', 33) . 'x'; // a 100 char string
         $boolCol = false;
         $command->bindParam(':int_col', $intCol, \PDO::PARAM_INT);
         $command->bindParam(':char_col', $charCol);
@@ -59,31 +59,31 @@ SQL;
             $command->bindParam(':numeric_col', $numericCol);
             $command->bindParam(':blob_col', $blobCol);
         }
-        $this->assertEquals(1, $command->execute());
+        $this->assertSame(1, $command->execute());
 
         $command = $db->createCommand('SELECT [[int_col]], [[char_col]], [[float_col]], [[blob_col]], [[numeric_col]], [[bool_col]] FROM {{type}}');
 
 //        $command->prepare();
 //        $command->pdoStatement->bindColumn('blob_col', $bc, \PDO::PARAM_LOB);
         $row = $command->queryOne();
-        $this->assertEquals($intCol, $row['int_col']);
-        $this->assertEquals($charCol, $row['char_col']);
+        $this->assertSame($intCol, $row['int_col']);
+        $this->assertSame($charCol, $row['char_col']);
         // Allow the backend to pad floats with zeroes.
         $this->assertRegExp("/{$floatCol}0*/", $row['float_col']);
 //        $this->assertEquals($floatCol, $row['float_col']);
         if ($this->driverName === 'mysql' || $this->driverName === 'sqlite' || $this->driverName === 'oci') {
-            $this->assertEquals($blobCol, $row['blob_col']);
+            $this->assertSame($blobCol, $row['blob_col']);
         } elseif (\defined('HHVM_VERSION') && $this->driverName === 'pgsql') {
             // HHVMs pgsql implementation does not seem to support blob columns correctly.
         } else {
             $this->assertInternalType('resource', $row['blob_col']);
-            $this->assertEquals($blobCol, stream_get_contents($row['blob_col']));
+            $this->assertSame($blobCol, \stream_get_contents($row['blob_col']));
         }
-        $this->assertEquals($numericCol, $row['numeric_col']);
-        if ($this->driverName === 'mysql' || $this->driverName === 'oci' || (\defined('HHVM_VERSION') && \in_array($this->driverName, ['sqlite', 'pgsql']))) {
-            $this->assertEquals($boolCol, (int) $row['bool_col']);
+        $this->assertSame($numericCol, $row['numeric_col']);
+        if ($this->driverName === 'mysql' || $this->driverName === 'oci' || (\defined('HHVM_VERSION') && \in_array($this->driverName, ['sqlite', 'pgsql'], true))) {
+            $this->assertSame($boolCol, (int) $row['bool_col']);
         } else {
-            $this->assertEquals($boolCol, $row['bool_col']);
+            $this->assertSame($boolCol, $row['bool_col']);
         }
 
         // bindValue
@@ -95,6 +95,6 @@ SQL;
         $sql = 'SELECT [[email]] FROM {{customer}} WHERE [[name]] = :name';
         $command = $db->createCommand($sql);
         $command->bindValue(':name', 'user5');
-        $this->assertEquals('user5@example.com', $command->queryScalar());
+        $this->assertSame('user5@example.com', $command->queryScalar());
     }
 }

@@ -24,7 +24,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\mysql\QueryBuilderTest
      */
     public function columnTypes()
     {
-        return \array_merge(array_filter(parent::columnTypes(), function($elem) {
+        return \array_merge(\array_filter(parent::columnTypes(), function($elem) {
             if ($elem[0] === Schema::TYPE_JSON) {
                 return false;
             }

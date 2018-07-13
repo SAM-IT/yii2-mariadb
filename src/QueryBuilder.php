@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 
 namespace SamIT\Yii2\MariaDb;
@@ -10,7 +11,7 @@ class QueryBuilder extends \yii\db\mysql\QueryBuilder
 {
     protected function defaultExpressionBuilders()
     {
-        return array_merge(parent::defaultExpressionBuilders(), [
+        return \array_merge(parent::defaultExpressionBuilders(), [
             JsonExpression::class => JsonExpressionBuilder::class
         ]);
     }

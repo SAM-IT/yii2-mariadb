@@ -1,17 +1,18 @@
 <?php
+declare(strict_types=1);
 
 
 class MariaDbBehaviorTest extends \yiiunit\TestCase
 {
 
-    public function testBadOwner()
+    public function testBadOwner(): void
     {
         $this->expectException(\yii\base\InvalidConfigException::class);
         $behavior = new \SamIT\Yii2\MariaDb\MariaDbBehavior();
         $behavior->attach(new stdClass());
     }
 
-    public function testBadConnection()
+    public function testBadConnection(): void
     {
         $connection = new \yii\db\Connection([
             'dsn' => 'sqlite::memory:'
@@ -21,7 +22,7 @@ class MariaDbBehaviorTest extends \yiiunit\TestCase
         $connection->attachBehavior('mariadb', $behavior);
     }
 
-    public function testValidConfig()
+    public function testValidConfig(): void
     {
         $config = self::getParam('databases')['mysql'];
         $connection = new \yii\db\Connection([
