@@ -8,7 +8,9 @@ services:
     - ./../:/project:ro
     - ./coverage:/coverage
     environment:
-    - TEST_RUNTIME_PATH=/tmp/runtime
+      TEST_RUNTIME_PATH: /runtime
+    tmpfs:
+      - /runtime
     depends_on:
     - mariadb
     entrypoint: ["phpdbg", "-qrr", "vendor/bin/phpunit", "--coverage-html", "/coverage", "--coverage-xml", "/coverage"]
@@ -19,7 +21,9 @@ services:
     volumes:
       - ./../:/project:ro
     environment:
-      - TEST_RUNTIME_PATH=/tmp/runtime
+      TEST_RUNTIME_PATH: /tmp/runtime
+    tmpfs:
+    - /runtime
     depends_on:
       - mariadb
     entrypoint: ["vendor/bin/phpunit"]
@@ -27,7 +31,8 @@ services:
   mariadb:
     image: mariadb
     environment:
-      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_ROOT_PASSWORD: ""
       MYSQL_DATABASE: yiitest
 
   phpmyadmin:

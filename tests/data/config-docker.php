@@ -25,7 +25,7 @@ $config = [
         'mysql' => [
             'dsn' => 'mysql:host=mariadb;dbname=yiitest',
             'username' => 'root',
-            'password' => 'secret',
+            'password' => '',
             'fixture' => __DIR__ . '/mariadb.sql',
             'as mariadb' => \SamIT\Yii2\MariaDb\MariaDbBehavior::class
         ],

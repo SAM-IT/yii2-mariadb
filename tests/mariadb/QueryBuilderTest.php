@@ -29,14 +29,14 @@ class QueryBuilderTest extends \yiiunit\framework\db\mysql\QueryBuilderTest
                 return false;
             }
             return true;
-        }),
-            [
-                Schema::TYPE_JSON,
-                $this->json(),
-                "json",
-                "json CHECK (JSON_VALID([[json]]))"
-            ]
-        );
+        }), [
+                [
+                    Schema::TYPE_JSON,
+                    $this->json(),
+                    "json",
+                    "json CHECK (JSON_VALID([[json]]))"
+                ]
+        ]);
     }
 
     public function checksProvider(): void
@@ -51,7 +51,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\mysql\QueryBuilderTest
 
     public function conditionProvider()
     {
-        return \array_merge(parent::conditionProvider(), [
+        return \array_merge(\yiiunit\framework\db\QueryBuilderTest::conditionProvider(), [
             // json conditions
             [
                 ['=', 'jsoncol', new JsonExpression(['lang' => 'uk', 'country' => 'UA'])],

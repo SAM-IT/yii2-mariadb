@@ -33,4 +33,9 @@ if (\getenv('TEST_RUNTIME_PATH')) {
 
 require_once $frameworkTestDir . '/TestCase.php';
 require_once __DIR__ .'/IsOneOfAssert.php';
-\yiiunit\TestCase::$params = require __DIR__ . '/data/config-docker.php';
+
+if (getenv('TRAVIS') === "true") {
+    \yiiunit\TestCase::$params = require __DIR__ . '/data/config-travis.php';
+} else {
+    \yiiunit\TestCase::$params = require __DIR__ . '/data/config-docker.php';
+}

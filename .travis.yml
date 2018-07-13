@@ -2,11 +2,11 @@ language: php
 php:
   - '7.1'
   - '7.2'
-services:
-  - docker
+addons:
+  mariadb: "10.2"
 env:
   global:
-    - COVERAGE=true TEST_COMMAND="composer test-with-cc"
+    - COVERAGE=true TEST_COMMAND="phpdbg -qrr vendor/bin/phpunit --coverage-xml coverage.xml"
 matrix:
   fast_finish: true
   include:
@@ -20,4 +20,4 @@ script:
   - $TEST_COMMAND
 after_script:
   - if [[ "$COVERAGE" = true ]]; then wget https://scrutinizer-ci.com/ocular.phar; fi
-  - if [[ "$COVERAGE" = true ]]; then php ocular.phar code-coverage:upload --format=php-clover tests/_output/coverage.xml; fi
+  - if [[ "$COVERAGE" = true ]]; then php ocular.phar code-coverage:upload --format=php-clover coverage.xml; fi
