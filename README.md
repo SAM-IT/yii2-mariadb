@@ -47,3 +47,27 @@ While the behavior method in theory allows you to use the connection without kno
 Specifically the `Connection` class might instantiate a the `Schema` before opening the connection. This happens when a query builder is requested before the database connection is opened.
 If you run into issues related to SQL syntax please try the first approach to see if that resolves the issue.
 
+# Column creation
+When creating JSON columns the `ColumnSchemaBuilder` requires the name of the column to add the table constraint.
+Since this is not the case for all other column types Yii does not pass the name of the column to the builder.
+Consider this code, for example in a migration:
+
+```php
+$this->alterColumn('{{test}}', 'field1', $this->json());
+```
+
+Here there is no way for the `ColumnSchemaBuilder` to know what the name of the column is going to be.
+Since the schema builder is ultimately passed to `QueryBuilder::alterColumn()`, we can intercept it there and replace the column name in the constraint.
+
+If you coerce the `ColumnSchemaBuilder` to string early, or use it without the `QueryBuilder` you will end up with SQL like this:
+```php
+ALTER COLUMN `field` JSON CHECK(json_valid({name}));
+```
+That will clearly not work.
+For those cases we have added a `toString(string $columnName)` method to the builder.
+```php
+// Will result in broken SQL.
+$this->alterColumn('{{test}}', 'field1', $this->json() . ' --APPEND SOMETHING');
+// Will result in working SQL.
+$this->alterColumn('{{test}}', 'field1', $this->json()->toString('field1') . ' --APPEND SOMETHING');
+```

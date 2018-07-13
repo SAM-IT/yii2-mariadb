@@ -25,4 +25,23 @@ class QueryBuilder extends \yii\db\mysql\QueryBuilder
         }
         return parent::getColumnType($type);
     }
+
+    public function alterColumn($table, $column, $type)
+    {
+        // Do the replacement here since we need the column name.
+        if ($type instanceof ColumnSchemaBuilder) {
+            $type = $type->toString($column);
+        }
+        return parent::alterColumn($table, $column, $type);
+    }
+
+    public function addColumn($table, $column, $type)
+    {
+        // Do the replacement here since we need the column name.
+        if ($type instanceof ColumnSchemaBuilder) {
+            $type = $type->toString($column);
+        }
+        return parent::addColumn($table, $column, $type);
+    }
+
 }

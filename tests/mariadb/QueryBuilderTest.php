@@ -35,7 +35,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\mysql\QueryBuilderTest
                     Schema::TYPE_JSON,
                     $this->json(),
                     "json",
-                    "json CHECK (JSON_VALID([[json]]))"
+                    "json CHECK (JSON_VALID([[{name}]]))"
                 ]
         ]);
     }
