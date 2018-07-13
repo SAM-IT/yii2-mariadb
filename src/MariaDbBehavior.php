@@ -8,10 +8,11 @@ namespace SamIT\Yii2\MariaDb;
 use yii\base\Behavior;
 use yii\base\InvalidConfigException;
 use yii\db\Connection;
+use yiiunit\framework\db\mysql\ConnectionTest;
 
 /**
  * This behavior adds support for MariaDB specific functionality to Yii's DB connection class.
- * Attach it only to connections to MariaDB instances!
+ * It will auto detect the database to which the connection exists.
  * @property Connection $owner
  */
 class MariaDbBehavior extends Behavior
@@ -22,13 +23,13 @@ class MariaDbBehavior extends Behavior
         if (!$owner instanceof Connection) {
             throw new InvalidConfigException('This behavior can only be attached to database connections');
         }
-        if ($owner->getDriverName() !== 'mysql') {
-            throw new InvalidConfigException('Driver name did not match expected "mysql", are you sure this connection is to a MariaDB connection?');
-        }
 
-        $owner->schemaMap['mysql'] = Schema::class;
+        $owner->on(Connection::EVENT_AFTER_OPEN, function ($event) use ($owner): void {
+            if (isset($owner->pdo)
+                && \strpos($owner->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), 'MariaDB') !== false
+            ) {
+                $owner->schemaMap['mysql'] = Schema::class;
+            }
+        });
     }
-
-
-
 }

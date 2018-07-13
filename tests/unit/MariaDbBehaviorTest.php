@@ -2,9 +2,11 @@
 declare(strict_types=1);
 
 
+use yii\db\Connection;
+use yii\db\mysql\Schema;
+
 class MariaDbBehaviorTest extends \yiiunit\TestCase
 {
-
     public function testBadOwner(): void
     {
         $this->expectException(\yii\base\InvalidConfigException::class);
@@ -17,9 +19,11 @@ class MariaDbBehaviorTest extends \yiiunit\TestCase
         $connection = new \yii\db\Connection([
             'dsn' => 'sqlite::memory:'
         ]);
-        $this->expectException(\yii\base\InvalidConfigException::class);
         $behavior = new \SamIT\Yii2\MariaDb\MariaDbBehavior();
         $connection->attachBehavior('mariadb', $behavior);
+        $this->assertSame(Schema::class, $connection->schemaMap['mysql']);
+        $connection->open();
+        $this->assertSame(Schema::class, $connection->schemaMap['mysql']);
     }
 
     public function testValidConfig(): void
@@ -33,5 +37,8 @@ class MariaDbBehaviorTest extends \yiiunit\TestCase
         $behavior = new \SamIT\Yii2\MariaDb\MariaDbBehavior();
         $connection->attachBehavior('mariadb', $behavior);
         $this->assertInstanceOf(\SamIT\Yii2\MariaDb\MariaDbBehavior::class, $connection->getBehavior('mariadb'));
+        $this->assertSame(Schema::class, $connection->schemaMap['mysql']);
+        $connection->open();
+        $this->assertSame(\SamIT\Yii2\MariaDb\Schema::class, $connection->schemaMap['mysql']);
     }
 }
