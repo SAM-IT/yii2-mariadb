@@ -24,12 +24,18 @@ class MariaDbBehavior extends Behavior
             throw new InvalidConfigException('This behavior can only be attached to database connections');
         }
 
-        $owner->on(Connection::EVENT_AFTER_OPEN, function ($event) use ($owner): void {
-            if (isset($owner->pdo)
-                && \strpos($owner->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), 'MariaDB') !== false
-            ) {
-                $owner->schemaMap['mysql'] = Schema::class;
-            }
-        });
+        $owner->on(Connection::EVENT_AFTER_OPEN, [$this, 'connectionOpenHandler']);
+    }
+
+    /**
+     * Updates the owners' schemaMap if needed.
+     */
+    public function connectionOpenHandler(): void
+    {
+        if (isset($this->owner->pdo)
+            && \strpos($this->owner->pdo->getAttribute(\PDO::ATTR_SERVER_VERSION), 'MariaDB') !== false
+        ) {
+            $this->owner->schemaMap['mysql'] = Schema::class;
+        }
     }
 }
