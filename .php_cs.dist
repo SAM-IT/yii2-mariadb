@@ -29,7 +29,7 @@ return \PhpCsFixer\Config::create()
         'native_function_invocation' => true,
         'no_php4_constructor' => true,
         'ordered_imports' => true,
-        'php_unit_strict' => true,
+        'php_unit_strict' => false,
         'phpdoc_order' => true,
         'strict_comparison' => true,
         'strict_param' => true,
