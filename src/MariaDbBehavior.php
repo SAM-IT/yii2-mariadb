@@ -19,10 +19,10 @@ class MariaDbBehavior extends Behavior
 {
     public function attach($owner): void
     {
-        parent::attach($owner);
         if (!$owner instanceof Connection) {
             throw new InvalidConfigException('This behavior can only be attached to database connections');
         }
+        parent::attach($owner);
     }
 
     public function events()
