@@ -19,7 +19,7 @@ The tests coverage is really high due to 2 reasons:
 
 # Usage
 To use the MariaDB `Schema` implementation there are 2 approaches:
-- Update the `schemaMap` property in your `Connection` config (the drivername is still `mysql` since we use the MySQL PDO driver)
+- Update the `schemaMap` property in your `Connection` config (the drivername is still `mysql` since we use the MySQL PDO driver) (RECOMMENDED)
 
 ```php
 'db' => [
@@ -38,6 +38,12 @@ To use the MariaDB `Schema` implementation there are 2 approaches:
 ]
 ```
 
+## Behavior method
 The behavior will register a handler for the `EVENT_AFTER_OPEN` on the connection.
 When a connection opens it will check the PDO attribute(s) to see if it's a MariaDB connection.
 If that's the case then it will update the `$schemaMap` property on the connection.
+
+While the behavior method in theory allows you to use the connection without knowing the database type in advance, it has some disadvantages.
+Specifically the `Connection` class might instantiate a the `Schema` before opening the connection. This happens when a query builder is requested before the database connection is opened.
+If you run into issues related to SQL syntax please try the first approach to see if that resolves the issue.
+
