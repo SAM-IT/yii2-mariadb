@@ -23,9 +23,15 @@ class MariaDbBehavior extends Behavior
         if (!$owner instanceof Connection) {
             throw new InvalidConfigException('This behavior can only be attached to database connections');
         }
-
-        $owner->on(Connection::EVENT_AFTER_OPEN, [$this, 'connectionOpenHandler']);
     }
+
+    public function events()
+    {
+        return [
+            Connection::EVENT_AFTER_OPEN => 'connectionOpenHandler'
+        ];
+    }
+
 
     /**
      * Updates the owners' schemaMap if needed.
