@@ -27,7 +27,9 @@ $config = [
             'username' => 'root',
             'password' => '',
             'fixture' => __DIR__ . '/mariadb.sql',
-            'as mariadb' => \SamIT\Yii2\MariaDb\MariaDbBehavior::class
+            'schemaMap' => [
+                'mysql' => \SamIT\Yii2\MariaDb\Schema::class
+            ]
         ],
     ],
 ];

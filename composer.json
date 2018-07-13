@@ -33,6 +33,6 @@
         "lint-fix": "vendor/bin/php-cs-fixer fix --verbose"
     },
     "config": {
-        "process-timeout": 600
+        "process-timeout": 1200
     }
 }

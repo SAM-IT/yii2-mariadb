@@ -15,7 +15,6 @@ class QueryBuilderTest extends \yiiunit\framework\db\mysql\QueryBuilderTest
         // Always open the connection so the behavior replaces the schema class.
         $connection = $this->getConnection($reset, $open);
         \Yii::$container->set('db', $connection);
-
         return new \SamIT\Yii2\MariaDb\QueryBuilder($connection);
     }
 
