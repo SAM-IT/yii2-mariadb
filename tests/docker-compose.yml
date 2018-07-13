@@ -39,9 +39,7 @@ services:
     image: phpmyadmin/phpmyadmin
     depends_on:
       - mariadb
-    environment:
-      PMA_HOST: mariadb
-      PMA_USER: root
-      PMA_PASSWORD: secret
+    volumes:
+      - ./data/config-phpmyadmin.php:/etc/phpmyadmin/config.user.inc.php:ro
     ports:
       - "12345:80"

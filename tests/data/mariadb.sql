@@ -150,7 +150,8 @@ CREATE TABLE `type` (
   `bool_col2` tinyint(1) DEFAULT '1',
   `ts_default` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `bit_col` BIT(8) NOT NULL DEFAULT b'10000010',
-  `json_col` json
+  `json_col` longtext check(json_valid(json_col)),
+  `longtext_col` longtext
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `animal` (

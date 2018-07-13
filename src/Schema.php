@@ -9,11 +9,6 @@ use yii\db\Expression;
 
 class Schema extends \yii\db\mysql\Schema
 {
-    /**
-     * @var bool whether to detect JSON fields in MariaDB via the field comments.
-     */
-    public $detectJsonViaComment = true;
-
     public function createQueryBuilder()
     {
         $result = new QueryBuilder($this->db);
@@ -23,11 +18,37 @@ class Schema extends \yii\db\mysql\Schema
         return $result;
     }
 
+    private $jsonColumns = [];
+
+    public function getJsonColumns($table)
+    {
+        $sql = $this->getCreateTableSql($table);
+
+        $result = [];
+
+        $regexp = '/CHECK\s*\(\s*json_valid\(\`(.+)\`\s*\)\s*\)/mi';
+        if (\preg_match_all($regexp, $sql, $matches, PREG_SET_ORDER)) {
+            foreach($matches as $match) {
+                $result[] = $match[1];
+            }
+        }
+
+        return $result;
+    }
+
+    protected function findColumns($table)
+    {
+        // Preload JSON columns by checking SQL.
+        $this->jsonColumns = $this->getJsonColumns($table);
+        return parent::findColumns($table);
+    }
+
+
     protected function loadColumnSchema($info)
     {
         $columnSchema = parent::loadColumnSchema($info);
         if ($info['type'] === 'longtext'
-            //&& strpos($info['comment'], 'yii-json') !== false
+            && \in_array($info['field'], $this->jsonColumns, true)
         ) {
             $columnSchema->type = \yii\db\Schema::TYPE_JSON;
             $columnSchema->phpType = 'array';

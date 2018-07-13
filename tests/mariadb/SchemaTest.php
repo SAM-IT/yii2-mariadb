@@ -64,6 +64,18 @@ SQL;
     {
         $result = parent::getExpectedColumns();
         $result['ts_default']['defaultValue'] = new Expression('current_timestamp()');
+        $result['longtext_col'] = [
+            'type' => 'text',
+            'dbType' => 'longtext',
+            'phpType' => 'string',
+            'allowNull' => true,
+            'autoIncrement' => false,
+            'enumValues' => null,
+            'size' => null,
+            'precision' => null,
+            'scale' => null,
+            'defaultValue' => null,
+        ];
         return $result;
     }
 }
