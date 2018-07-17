@@ -18,8 +18,10 @@ The tests coverage is really high due to 2 reasons:
 - We run the core tests for Yii2 (with some minor changes) to guarantee interoperability with the framework.
 
 # Usage
-To use the MariaDB `Schema` implementation there are 2 approaches:
-- Update the `schemaMap` property in your `Connection` config (the drivername is still `mysql` since we use the MySQL PDO driver) (RECOMMENDED)
+To use the MariaDB `Schema` implementation there are several approaches.
+
+## Override the schema class used for MySQL
+Update the `schemaMap` property in your `Connection` config (the drivername is still `mysql` since we use the MySQL PDO driver) (RECOMMENDED)
 
 ```php
 'db' => [
@@ -30,7 +32,21 @@ To use the MariaDB `Schema` implementation there are 2 approaches:
 ]
 ```
 
-- Add the `MariaDbBehavior` to your `Connection`.
+## Add schema class to schemaMap
+Append the new Schema class to the `schemaMap` property and set the `driverName` property manually.
+
+```php
+'db' => [
+    'class' => Connection::class,
+    'driverName' => 'mariadb',
+    'schemaMap' => [
+        'mariadb' => SamIT\Yii2\MariaDb\Schema::class
+    ]
+]
+```
+
+## Use the provided behavior
+Add the `MariaDbBehavior` to your `Connection`.
 ```php
 'db' => [
     'class' => Connection::class',
@@ -38,7 +54,6 @@ To use the MariaDB `Schema` implementation there are 2 approaches:
 ]
 ```
 
-## Behavior method
 The behavior will register a handler for the `EVENT_AFTER_OPEN` on the connection.
 When a connection opens it will check the PDO attribute(s) to see if it's a MariaDB connection.
 If that's the case then it will update the `$schemaMap` property on the connection.
