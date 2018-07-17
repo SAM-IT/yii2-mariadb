@@ -62,6 +62,15 @@ While the behavior method in theory allows you to use the connection without kno
 Specifically the `Connection` class might instantiate a the `Schema` before opening the connection. This happens when a query builder is requested before the database connection is opened.
 If you run into issues related to SQL syntax please try the first approach to see if that resolves the issue.
 
+# JSON Column detection
+Since MariaDB has no built-in JSON data type we need to do some extra work to detect JSON columns.
+We do this by parsing the SQL obtained when using `SHOW CREATE TABLE`. Since MariaDB supports `CHECK` constraints these are used to ensure a column can only contain valid JSON.
+Any constraint that of the form: ``json_valid(`column1`)`` will identify the column as JSON. Note that this could lead to problems if you have weird constraints, consider this:
+```sql
+`column1` longtext CHECK(not json_valid(`column1`));
+```
+Will mark `column1` as a JSON column.
+
 # Column creation
 When creating JSON columns the `ColumnSchemaBuilder` requires the name of the column to add the table constraint.
 Since this is not the case for all other column types Yii does not pass the name of the column to the builder.
