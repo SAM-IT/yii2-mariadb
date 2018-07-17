@@ -14,7 +14,7 @@ class ColumnSchemaBuilder extends \yii\db\mysql\ColumnSchemaBuilder
     {
         parent::__construct($type, $length, $db, $config);
         if ($this->isJson()) {
-            $this->check("JSON_VALID([[{name}]])");
+            $this->check("[[{name}]] is null or json_valid([[{name}]])");
         }
     }
 
