@@ -30,7 +30,7 @@ class Schema extends \yii\db\mysql\Schema
         $sql = $this->getCreateTableSql($table);
         $result = [];
 
-        $regexp = '/json_valid\(\`(.+)\`\s*\))/mi';
+        $regexp = '/json_valid\(\`(.+)\`\s*\)/mi';
         if (\preg_match_all($regexp, $sql, $matches, PREG_SET_ORDER)) {
             foreach($matches as $match) {
                 $result[] = $match[1];
