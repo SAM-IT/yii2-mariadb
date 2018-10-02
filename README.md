@@ -45,23 +45,6 @@ Append the new Schema class to the `schemaMap` property and set the `driverName`
 ]
 ```
 
-## Use the provided behavior
-Add the `MariaDbBehavior` to your `Connection`.
-```php
-'db' => [
-    'class' => Connection::class',
-    'as mariadb' => \SamIT\Yii2\MariaDb\MariaDbBehavior::class
-]
-```
-
-The behavior will register a handler for the `EVENT_AFTER_OPEN` on the connection.
-When a connection opens it will check the PDO attribute(s) to see if it's a MariaDB connection.
-If that's the case then it will update the `$schemaMap` property on the connection.
-
-While the behavior method in theory allows you to use the connection without knowing the database type in advance, it has some disadvantages.
-Specifically the `Connection` class might instantiate a the `Schema` before opening the connection. This happens when a query builder is requested before the database connection is opened.
-If you run into issues related to SQL syntax please try the first approach to see if that resolves the issue.
-
 # JSON Column detection
 Since MariaDB has no built-in JSON data type we need to do some extra work to detect JSON columns.
 We do this by parsing the SQL obtained when using `SHOW CREATE TABLE`. Since MariaDB supports `CHECK` constraints these are used to ensure a column can only contain valid JSON.
