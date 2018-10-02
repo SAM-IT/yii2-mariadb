@@ -10,3 +10,10 @@ tools:
   php_code_sniffer:
     config:
       standard: "PSR2"
+build:
+  nodes:
+    analysis:
+      tests:
+        override:
+          - php-scrutinizer-run
+          - phpcs-run
