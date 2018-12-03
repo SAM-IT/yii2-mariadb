@@ -66,8 +66,7 @@ class Schema extends \yii\db\mysql\Schema
     protected function loadColumnSchema($info)
     {
         $columnSchema = parent::loadColumnSchema($info);
-        if ($info['type'] === 'longtext'
-            && \in_array($info['field'], $this->jsonColumns, true)
+        if (\in_array($info['field'], $this->jsonColumns, true)
         ) {
             $columnSchema->type = \yii\db\Schema::TYPE_JSON;
             $columnSchema->phpType = 'array';
