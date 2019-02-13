@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
+use SamIT\Yii2\MariaDb\QueryBuilder as QueryBuilder;
 use yii\base\DynamicModel;
 use yii\db\Expression;
 use yii\db\JsonExpression;
 use yii\db\Query;
 use yii\db\Schema;
-use yii\helpers\Json;
 
 class QueryBuilderTest extends \yiiunit\framework\db\mysql\QueryBuilderTest
 {
@@ -15,7 +15,7 @@ class QueryBuilderTest extends \yiiunit\framework\db\mysql\QueryBuilderTest
         // Always open the connection so the behavior replaces the schema class.
         $connection = $this->getConnection($reset, $open);
         \Yii::$container->set('db', $connection);
-        return new \SamIT\Yii2\MariaDb\QueryBuilder($connection);
+        return new QueryBuilder($connection);
     }
 
 
