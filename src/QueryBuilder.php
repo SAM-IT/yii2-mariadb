@@ -44,4 +44,14 @@ class QueryBuilder extends \yii\db\mysql\QueryBuilder
         return parent::addColumn($table, $column, $type);
     }
 
+    public function createTable($table, $columns, $options = null)
+    {
+        foreach($columns as $name => &$type) {
+            if ($type instanceof ColumnSchemaBuilder && \is_string($name)) {
+                $type = $type->toString($name);
+            }
+        }
+        return parent::createTable($table, $columns, $options);
+    }
+
 }
