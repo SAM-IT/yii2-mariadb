@@ -209,6 +209,11 @@ CREATE TABLE `dossier` (
 CREATE TABLE `storage` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `data` JSON NOT NULL CHECK (json_valid(`data`)),
+  `defaultValue1` JSON CHECK (json_valid(`defaultValue1`)),
+  `defaultValue2` JSON DEFAULT '[]' NOT NULL CHECK (json_valid(`defaultValue2`)) ,
+  `defaultValue3` JSON DEFAULT '{}' NOT NULL CHECK (json_valid(`defaultValue3`)),
+  `defaultValue4` JSON DEFAULT '[1,2]' NOT NULL CHECK (json_valid(`defaultValue4`)),
+  `defaultValue5` JSON DEFAULT '{"a":1,"b":2}' NOT NULL CHECK (json_valid(`defaultValue5`)),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
