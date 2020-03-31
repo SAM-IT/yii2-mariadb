@@ -19,7 +19,16 @@ class ActiveRecordTest extends \yiiunit\framework\db\mysql\ActiveRecordTest
             'last_update_time' => '2018-02-21',
         ];
 
-        $storage = new Storage(['data' => $data]);
+        $defaultStorage = new Storage();
+        $defaultStorage->loadDefaultValues();
+
+        $this->assertSame($defaultStorage->defaultValue1, null, 'NULL values preserved');
+        $this->assertSame($defaultStorage->defaultValue2, [], 'Empty array converted');
+        $this->assertSame($defaultStorage->defaultValue3, [], 'Empty object converted');
+        $this->assertSame($defaultStorage->defaultValue4, [1,2], 'Array with elements converted');
+        $this->assertSame($defaultStorage->defaultValue5, ["a"=>1,"b"=>2], 'Object with properties converted');
+
+        $storage = new Storage(['data'=>$data]);
         $this->assertTrue($storage->save(), 'Storage can be saved');
         $this->assertNotNull($storage->id);
 
