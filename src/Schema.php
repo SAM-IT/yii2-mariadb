@@ -70,6 +70,7 @@ class Schema extends \yii\db\mysql\Schema
             $columnSchema->type = \yii\db\Schema::TYPE_JSON;
             $columnSchema->phpType = 'array';
             $columnSchema->dbType = \yii\db\Schema::TYPE_JSON;
+            $columnSchema->defaultValue = \json_decode(\trim($columnSchema->defaultValue ??'', "'"));
         }
 
         if ($info['default'] === 'current_timestamp()') {
