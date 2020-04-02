@@ -65,12 +65,13 @@ class Schema extends \yii\db\mysql\Schema
 
     protected function loadColumnSchema($info)
     {
-        $columnSchema = parent::loadColumnSchema($info);
         if (\in_array($info['field'], $this->jsonColumns, true)) {
-            $columnSchema->type = \yii\db\Schema::TYPE_JSON;
-            $columnSchema->phpType = 'array';
-            $columnSchema->dbType = \yii\db\Schema::TYPE_JSON;
+            $info['type'] = \yii\db\Schema::TYPE_JSON;
+            if (\is_string($info['default']) && \preg_match("/^'(.*)'$/", $info['default'], $matches)) {
+                $info['default'] = $matches[1];
+            }
         }
+        $columnSchema = parent::loadColumnSchema($info);
 
         if ($info['default'] === 'current_timestamp()') {
             $columnSchema->defaultValue = new Expression('current_timestamp()');
