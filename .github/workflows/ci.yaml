@@ -21,7 +21,7 @@ jobs:
         image: mariadb
         ports:
           - 3306
-        environment:
+        env:
           MYSQL_ALLOW_EMPTY_PASSWORD: 1
           MYSQL_ROOT_PASSWORD: ""
           MYSQL_DATABASE: yiitest
