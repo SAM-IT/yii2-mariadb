@@ -4,7 +4,8 @@
 
     <file>src</file>
     <file>tests</file>
-
+    <exclude-pattern>tests/overrides/</exclude-pattern>
+    <exclude-pattern>tests/bootstrap.php</exclude-pattern>
     <arg name="basepath" value="."/>
     <arg name="colors"/>
     <arg name="parallel" value="75"/>

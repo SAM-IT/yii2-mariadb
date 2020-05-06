@@ -17,14 +17,27 @@ $_SERVER['SCRIPT_FILENAME'] = __FILE__;
 
 // require composer autoloader if available
 $composerAutoload = __DIR__ . '/../vendor/autoload.php';
-if (\is_file($composerAutoload)) {
-    require_once $composerAutoload;
-}
 
 $frameworkTestDir = __DIR__ . '/../vendor/yiisoft/yii2-dev/tests';
-require_once $frameworkTestDir . '/../framework/Yii.php';
 
+class Yii extends \yii\BaseYii
+{
+
+};
+Yii::$classMap = require $frameworkTestDir . '/../framework/classes.php';
+Yii::$container = new yii\di\Container();
 Yii::setAlias('@yiiunit', $frameworkTestDir);
+spl_autoload_register(['Yii', 'autoload'], true, false);
+
+/** @var \Composer\Autoload\ClassLoader $loader */
+$loader = require $composerAutoload;
+foreach ($loader->getClassMap() as $class => $file) {
+    if (preg_match('~vendor/composer/\.\./\.\./tests/overrides~', $file)) {
+        class_exists($class);
+    }
+}
+
+
 
 if (\getenv('TEST_RUNTIME_PATH')) {
     Yii::setAlias('@yiiunit/runtime', \getenv('TEST_RUNTIME_PATH'));
