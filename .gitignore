@@ -4,3 +4,5 @@ composer.lock
 .idea
 /tests/coverage
 /.php_cs.cache
+cghooks.lock
+

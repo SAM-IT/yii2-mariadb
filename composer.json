@@ -15,6 +15,9 @@
         }
     },
     "autoload-dev": {
+        "classmap": [
+            "tests/overrides"
+        ],
         "psr-4": {
             "SamIT\\Yii2\\MariaDb\\Tests\\": [
                 "tests/"

@@ -31,11 +31,8 @@ if (\getenv('TEST_RUNTIME_PATH')) {
     Yii::setAlias('@runtime', \getenv('TEST_RUNTIME_PATH'));
 }
 
-require_once $frameworkTestDir . '/TestCase.php';
-require_once __DIR__ .'/IsOneOfAssert.php';
-
-if (\getenv('TRAVIS') === "true") {
-    \yiiunit\TestCase::$params = require __DIR__ . '/data/config-travis.php';
-} else {
+if (\getenv('TEST_RUNTIME_PATH') === "true") {
     \yiiunit\TestCase::$params = require __DIR__ . '/data/config-docker.php';
+} else {
+    \yiiunit\TestCase::$params = require __DIR__ . '/data/config-ci.php';
 }
