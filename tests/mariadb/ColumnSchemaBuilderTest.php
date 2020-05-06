@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+namespace SamIT\Yii2\MariaDb\Tests;
 
 use SamIT\Yii2\MariaDb\ColumnSchemaBuilder;
 

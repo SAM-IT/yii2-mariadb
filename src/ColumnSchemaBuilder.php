@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SamIT\Yii2\MariaDb;
 
-
 use yii\base\InvalidConfigException;
 use yii\db\Connection;
 
@@ -27,5 +26,4 @@ class ColumnSchemaBuilder extends \yii\db\mysql\ColumnSchemaBuilder
     {
         return \strtr(parent::__toString(), ['{name}' => $columnName]);
     }
-
 }

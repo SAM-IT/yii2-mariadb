@@ -1,0 +1,77 @@
+name: Continous integration
+on: [push, pull_request]
+jobs:
+  cs:
+    name: Check code style
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          tools: phpcs
+      - name: Test code style
+        run: phpcs
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb
+        ports:
+          - 3306
+        environment:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 1
+          MYSQL_ROOT_PASSWORD: ""
+          MYSQL_DATABASE: yiitest
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+    strategy:
+      matrix:
+        php: ['7.3', '7.4']
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: pecl
+          coverage: pcov
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ matrix.php }}-composer-
+      - name: Install dependencies
+        run: composer install --prefer-dist
+      - name: Test code style
+        run: composer lint
+      - name: Verify MariaDB connection
+        env:
+          PORT: ${{ job.services.mariadb.ports[3306] }}
+        run: |
+          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
+            sleep 1
+          done
+      - name: Run tests
+        run: composer test -- --coverage-clover coverage.xml --coverage-text
+      - name: Get Ocular
+        run: wget https://scrutinizer-ci.com/ocular.phar
+      - name: Push code coverage
+        run: php ocular.phar code-coverage:upload --format=php-clover coverage.xml
+  release:
+    name: Automated release
+    needs: [test, cs]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - run: npx semantic-release -d
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

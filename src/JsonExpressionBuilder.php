@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SamIT\Yii2\MariaDb;
 
-
 use yii\db\ExpressionInterface;
 use yii\db\JsonExpression;
 use yii\db\Query;

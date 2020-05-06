@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SamIT\Yii2\MariaDb;
 
-
 use yii\db\JsonExpression;
 
 class QueryBuilder extends \yii\db\mysql\QueryBuilder
@@ -46,12 +45,11 @@ class QueryBuilder extends \yii\db\mysql\QueryBuilder
 
     public function createTable($table, $columns, $options = null)
     {
-        foreach($columns as $name => &$type) {
+        foreach ($columns as $name => &$type) {
             if ($type instanceof ColumnSchemaBuilder && \is_string($name)) {
                 $type = $type->toString($name);
             }
         }
         return parent::createTable($table, $columns, $options);
     }
-
 }

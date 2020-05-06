@@ -32,7 +32,7 @@ class Schema extends \yii\db\mysql\Schema
 
         $regexp = '/json_valid\([\`"](.+)[\`"]\s*\)/mi';
         if (\preg_match_all($regexp, $sql, $matches, PREG_SET_ORDER)) {
-            foreach($matches as $match) {
+            foreach ($matches as $match) {
                 $result[] = $match[1];
             }
         }
@@ -48,7 +48,6 @@ class Schema extends \yii\db\mysql\Schema
     protected function findColumns($table)
     {
         try {
-
             // Preload JSON columns by checking SQL.
             $this->jsonColumns = $this->getJsonColumns($table);
         } catch (Exception $e) {
@@ -84,5 +83,4 @@ class Schema extends \yii\db\mysql\Schema
     {
         return new ColumnSchemaBuilder($type, $length, $this->db);
     }
-
 }

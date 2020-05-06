@@ -1,12 +1,7 @@
 <?php
 declare(strict_types=1);
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
+namespace SamIT\Yii2\MariaDb\Tests;
 
-namespace yiiunit\framework\db\mysql;
 use yii\db\Expression;
 
 use yiiunit\framework\db\AnyCaseValue;
@@ -36,7 +31,7 @@ SQL;
 
         $dt = $schema->columns['dt'];
 
-        $this->assertInstanceOf(Expression::className(),$dt->defaultValue);
+        $this->assertInstanceOf(Expression::className(), $dt->defaultValue);
     }
 
     public function testGetSchemaNames(): void
