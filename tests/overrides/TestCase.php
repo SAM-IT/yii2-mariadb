@@ -213,6 +213,19 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         self::assertThat($actual, new IsOneOfAssert($expected), $message);
     }
 
+    public function assertInternalType(string $type, $actual)
+    {
+        switch($type) {
+            case 'array':
+                return $this->assertIsArray($actual);
+            case 'string':
+                return $this->assertIsString($actual);
+            case 'resource':
+                return $this->assertIsResource($actual);
+            default:
+                throw new \Exception('Unknown internal type: ' . $type);
+        }
+    }
     /**
      * Changes db component config
      * @param $db
@@ -228,4 +241,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             Yii::$app->db->password = isset($database['password']) ? $database['password'] : null;
         }
     }
+
+
 }
