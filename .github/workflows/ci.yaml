@@ -57,6 +57,8 @@ jobs:
           while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
             sleep 1
           done
+      - name: Set up database
+        run: mysql -h"127.0.0.1" -P"$PORT" yiitest < tests/data/mariadb.sql
       - name: Run tests
         env:
           PORT: ${{ job.services.mariadb.ports[3306] }}
