@@ -78,7 +78,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '14.x'
-      - run: npm installi
+      - run: npm install
         name: Install NPM dependencies for semantic-release
       - run: npx semantic-release
         env:
