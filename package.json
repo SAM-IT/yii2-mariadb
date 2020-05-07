@@ -1,0 +1,11 @@
+{
+  "name": "yii2-mariadb",
+  "description": "N/A",
+  "private": true,
+  "devDependencies": {
+    "@commitlint/config-conventional": "^8.3.4",
+    "commitlint": "^8.3.5",
+    "conventional-changelog-conventionalcommits": "^4.2.3",
+    "semantic-release": "^17.0.7"
+  }
+}
