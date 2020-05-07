@@ -58,6 +58,8 @@ jobs:
             sleep 1
           done
       - name: Set up database
+        env:
+          PORT: ${{ job.services.mariadb.ports[3306] }}
         run: mysql -h"127.0.0.1" -P"$PORT" yiitest < tests/data/mariadb.sql
       - name: Run tests
         env:
