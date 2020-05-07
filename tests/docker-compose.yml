@@ -1,25 +1,13 @@
-version: '2'
+version: '3.7'
 services:
-  phpunit-coverage:
-    image: sammousa/php-with-extensions
-    user: "${UID}:${GID}"
-    working_dir: /project
-    volumes:
-    - ./../:/project:ro
-    - ./coverage:/coverage
-    environment:
-      TEST_RUNTIME_PATH: /runtime
-    tmpfs:
-      - /runtime
-    depends_on:
-    - mariadb
-    entrypoint: ["phpdbg", "-qrr", "vendor/bin/phpunit", "--coverage-html", "/coverage", "--coverage-xml", "/coverage"]
   phpunit:
-    image: sammousa/php-with-extensions
-    user: "${UID}:${GID}"
+    init: true
+    build:
+      context: docker
     working_dir: /project
     volumes:
-      - ./../:/project:ro
+      - ./../:/project:rw
+      - ./../src:/project/src:ro
     environment:
       TEST_RUNTIME_PATH: /tmp/runtime
     tmpfs:
@@ -27,19 +15,11 @@ services:
     depends_on:
       - mariadb
     entrypoint: ["vendor/bin/phpunit"]
-
   mariadb:
     image: mariadb
+    volumes:
+      - ./data/mariadb.sql:/docker-entrypoint-initdb.d/mariadb.sql
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
       MYSQL_ROOT_PASSWORD: ""
       MYSQL_DATABASE: yiitest
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    depends_on:
-      - mariadb
-    volumes:
-      - ./data/config-phpmyadmin.php:/etc/phpmyadmin/config.user.inc.php:ro
-    ports:
-      - "12345:80"

@@ -16,11 +16,11 @@
     },
     "autoload-dev": {
         "classmap": [
-            "tests/overrides"
+            "vendor/yiisoft/yii2-dev/tests/data/ar"
         ],
         "psr-4": {
             "SamIT\\Yii2\\MariaDb\\Tests\\": [
-                "tests/"
+                "tests/mariadb"
             ]
         }
     },

@@ -7,6 +7,10 @@ namespace SamIT\Yii2\MariaDb;
 use yii\base\InvalidConfigException;
 use yii\db\Connection;
 
+/**
+ * Class ColumnSchemaBuilder
+ * @package SamIT\Yii2\MariaDb
+ */
 class ColumnSchemaBuilder extends \yii\db\mysql\ColumnSchemaBuilder
 {
     public function __construct(string $type, $length = null, ?Connection $db = null, array $config = [])

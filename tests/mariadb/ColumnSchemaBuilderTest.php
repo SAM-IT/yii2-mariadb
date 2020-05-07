@@ -3,13 +3,13 @@ declare(strict_types=1);
 namespace SamIT\Yii2\MariaDb\Tests;
 
 use SamIT\Yii2\MariaDb\ColumnSchemaBuilder;
+use yiiunit\data\ar\ActiveRecord;
 
 /**
  * ColumnSchemaBuilderTest tests ColumnSchemaBuilder for MySQL.
- * @group db
- * @group mysql
+ * @covers \SamIT\Yii2\MariaDb\ColumnSchemaBuilder
  */
-class ColumnSchemaBuilderTest extends \yiiunit\framework\db\mysql\ColumnSchemaBuilderTest
+class ColumnSchemaBuilderTest extends TestCase
 {
     /**
      * @param string $type
@@ -26,6 +26,6 @@ class ColumnSchemaBuilderTest extends \yiiunit\framework\db\mysql\ColumnSchemaBu
         /** @var \SamIT\Yii2\MariaDb\ColumnSchemaBuilder $builder */
         $builder = $this->getColumnSchemaBuilder('json');
         $this->assertInstanceOf(\SamIT\Yii2\MariaDb\ColumnSchemaBuilder::className(), $builder);
-        $this->assertNotContains('{name}', $builder->toString('test'));
+        $this->assertStringNotContainsString('{name}', $builder->toString('test'));
     }
 }

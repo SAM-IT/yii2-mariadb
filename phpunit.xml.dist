@@ -8,7 +8,7 @@
 		stopOnFailure="false"
 		>
 		<testsuites>
-			<testsuite name="Yii Test Suite">
+			<testsuite name="Yii2-MariaDB Suite">
 				<directory>./tests</directory>
 			</testsuite>
 		</testsuites>

@@ -10,13 +10,9 @@ use yii\db\TableSchema;
 
 class Schema extends \yii\db\mysql\Schema
 {
-    public function createQueryBuilder()
+    public function createQueryBuilder(): QueryBuilder
     {
-        $result = new QueryBuilder($this->db);
-        $result->setExpressionBuilders([
-            'yii\db\JsonExpression' => JsonExpressionBuilder::class
-        ]);
-        return $result;
+        return new QueryBuilder($this->db);
     }
 
     private $jsonColumns = [];

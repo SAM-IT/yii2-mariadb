@@ -2,75 +2,51 @@
 declare(strict_types=1);
 namespace SamIT\Yii2\MariaDb\Tests;
 
+use SamIT\Yii2\MariaDb\ColumnSchemaBuilder;
+use SamIT\Yii2\MariaDb\JsonExpressionBuilder;
+use SamIT\Yii2\MariaDb\QueryBuilder;
+use SamIT\Yii2\MariaDb\Schema;
 use yii\db\Expression;
 
+use yii\db\JsonExpression;
+use yii\db\mysql\ColumnSchema;
+use yiiunit\data\ar\Storage;
 use yiiunit\framework\db\AnyCaseValue;
 
 /**
- * @group db
- * @group mysql
+ *
+ * @covers \SamIT\Yii2\MariaDb\Schema
  */
-class SchemaTest extends \yiiunit\framework\db\SchemaTest
+class SchemaTest extends TestCase
 {
-    public $driverName = 'mysql';
-
-    public function testLoadDefaultDatetimeColumn(): void
+    public function testCreateQueryBuilder()
     {
-        $sql = <<<SQL
-CREATE TABLE  IF NOT EXISTS `datetime_test`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `dt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
-SQL;
-
-        $this->getConnection()->createCommand($sql)->execute();
-
-        $schema = $this->getConnection()->getTableSchema('datetime_test');
-
-        $dt = $schema->columns['dt'];
-
-        $this->assertInstanceOf(Expression::className(), $dt->defaultValue);
+        $result = $this->getConnection()->getSchema()->createQueryBuilder();
+        $this->assertInstanceOf(QueryBuilder::class, $result);
     }
 
-    public function testGetSchemaNames(): void
+    public function testGetJsonColumns()
     {
-        $this->markTestSkipped('Schemas are not supported in MariaDB.');
+        /** @var Schema $schema */
+        $schema = $this->getConnection()->getSchema();
+        $jsonColumns = $schema->getJsonColumns(Storage::getTableSchema());
+        $this->assertSame(['data', 'defaultValue1', 'defaultValue2', 'defaultValue3', 'defaultValue4', 'defaultValue5'], $jsonColumns);
     }
 
-    public function constraintsProvider()
+    public function testCreateColumnSchemaBuilder()
     {
-        $result = parent::constraintsProvider();
-        $result['1: check'][2] = false;
-
-        $result['2: primary key'][2]->name = null;
-        $result['2: check'][2] = false;
-
-        // Work aroung bug in MySQL 5.1 - it creates only this table in lowercase. O_o
-        $result['3: foreign key'][2][0]->foreignTableName = new AnyCaseValue('T_constraints_2');
-        $result['3: check'][2] = false;
-
-        $result['4: check'][2] = false;
-        return $result;
+        $this->assertInstanceOf(ColumnSchemaBuilder::class, $this->getConnection()->schema->createColumnSchemaBuilder(Schema::TYPE_PK));
+    }
+    public function testUnknownTableSchema()
+    {
+        $this->assertNull($this->getConnection()->schema->getTableSchema('abc'));
     }
 
-    public function getExpectedColumns()
+    public function testColumnWithDefaultTimestamp()
     {
-        $result = parent::getExpectedColumns();
-        $result['ts_default']['defaultValue'] = new Expression('current_timestamp()');
-        $result['longtext_col'] = [
-            'type' => 'text',
-            'dbType' => 'longtext',
-            'phpType' => 'string',
-            'allowNull' => true,
-            'autoIncrement' => false,
-            'enumValues' => null,
-            'size' => null,
-            'precision' => null,
-            'scale' => null,
-            'defaultValue' => null,
-        ];
-        return $result;
+        $typeSchema = $this->getConnection()->schema->getTableSchema('type');
+        $column = $typeSchema->getColumn('ts_default');
+        $this->assertInstanceOf(ColumnSchema::class, $column);
+        $this->assertInstanceOf(Expression::class, $column->defaultValue);
     }
 }

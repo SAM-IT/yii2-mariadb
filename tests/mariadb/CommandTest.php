@@ -6,7 +6,7 @@ namespace SamIT\Yii2\MariaDb\Tests;
  * @group db
  * @group mysql
  */
-class CommandTest extends \yiiunit\framework\db\mysql\CommandTest
+class CommandTest extends TestCase
 {
     public function testBindParamValue(): void
     {
@@ -56,14 +56,7 @@ SQL;
         $this->assertEquals($charCol, $row['char_col']);
         $this->assertEquals($floatCol, (float)$row['float_col']);
 //        $this->assertEquals($floatCol, $row['float_col']);
-        if ($this->driverName === 'mysql' || $this->driverName === 'sqlite' || $this->driverName === 'oci') {
-            $this->assertSame($blobCol, $row['blob_col']);
-        } elseif (\defined('HHVM_VERSION') && $this->driverName === 'pgsql') {
-            // HHVMs pgsql implementation does not seem to support blob columns correctly.
-        } else {
-            $this->assertInternalType('resource', $row['blob_col']);
-            $this->assertSame($blobCol, \stream_get_contents($row['blob_col']));
-        }
+        $this->assertSame($blobCol, $row['blob_col']);
         $this->assertSame($numericCol, $row['numeric_col']);
         $this->assertSame($boolCol, (bool) $row['bool_col']);
 
