@@ -15,7 +15,16 @@ class Schema extends \yii\db\mysql\Schema
         return new QueryBuilder($this->db);
     }
 
-    private $jsonColumns = [];
+    /**
+     * @var string[][] Outer array uses the table name as key
+     */
+    private array $jsonColumns = [];
+
+    /**
+     * This is added to support columns that hold JSON but do not have a constraint making it recognizable as JSON
+     * @var string[][] List of manually configured columns that should be assumed to be JSON
+     */
+    public array $columnOverrides = [];
 
     /**
      * @throws Exception if the table does not exist
@@ -37,15 +46,25 @@ class Schema extends \yii\db\mysql\Schema
     }
 
     /**
+     * This is needed because `findColumns()` iterates over columns, calling `loadColumnSchema()` but not passing the name.
+     * We need the name because part of our column types (JSON) are not defined in the column, but instead as a constraint on
+     * the table itself
+     * @var string|null Stores the name of the table currently being examined
+     */
+    private ?string $currentTable;
+
+    /**
      * @param TableSchema $table
      * @throws \Exception
      * @return bool
      */
     protected function findColumns($table)
     {
+        $this->currentTable = $table->fullName;
         try {
             // Preload JSON columns by checking SQL.
-            $this->jsonColumns = $this->getJsonColumns($table);
+            $this->jsonColumns[$table->name] = array_merge($this->columnOverrides[$table->fullName] ?? [], $this->getJsonColumns($table));
+            return parent::findColumns($table);
         } catch (Exception $e) {
             $previous = $e->getPrevious();
             if ($previous instanceof \PDOException && \strpos($previous->getMessage(), 'SQLSTATE[42S02') !== false) {
@@ -53,14 +72,15 @@ class Schema extends \yii\db\mysql\Schema
                 // https://dev.mysql.com/doc/refman/5.5/en/error-messages-server.html#error_er_bad_table_error
                 return false;
             }
+        } finally {
+            $this->currentTable = null;
         }
-        return parent::findColumns($table);
     }
 
 
     protected function loadColumnSchema($info)
     {
-        if (\in_array($info['field'], $this->jsonColumns, true)) {
+        if (\in_array($info['field'], $this->jsonColumns[$this->currentTable], true)) {
             $info['type'] = \yii\db\Schema::TYPE_JSON;
             if (\is_string($info['default']) && \preg_match("/^'(.*)'$/", $info['default'], $matches)) {
                 $info['default'] = $matches[1];
