@@ -69,6 +69,7 @@ jobs:
         run: wget https://scrutinizer-ci.com/ocular.phar
       - name: Push code coverage
         run: php ocular.phar code-coverage:upload --format=php-clover coverage.xml
+        if: matrix.php == '7.4'
   release:
     name: Automated release
     needs: [test, cs]
