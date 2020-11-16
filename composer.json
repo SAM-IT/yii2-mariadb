@@ -30,6 +30,9 @@
             "url": "https://asset-packagist.org"
         }
     ],
+    "require": {
+        "php": ">= 7.4"
+    },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.5",
         "yiisoft/yii2-dev": "dev-master",
