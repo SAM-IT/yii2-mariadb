@@ -28,7 +28,7 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     strategy:
       matrix:
-        php: ['7.4', '8.0', '8.1']
+        php: ['7.4', '8.0']
     steps:
       - uses: actions/checkout@v2
       - name: Set up PHP
