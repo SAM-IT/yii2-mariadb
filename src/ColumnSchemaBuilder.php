@@ -28,6 +28,17 @@ class ColumnSchemaBuilder extends \yii\db\mysql\ColumnSchemaBuilder
 
     public function toString(string $columnName)
     {
-        return \strtr(parent::__toString(), ['{name}' => $columnName]);
+        switch ($this->getTypeCategory()) {
+            case self::CATEGORY_PK:
+                $format = '{type}{length}{comment}{append}{pos}{check}';
+                break;
+            case self::CATEGORY_NUMERIC:
+                $format = '{type}{length}{unsigned}{notnull}{default}{unique}{comment}{append}{pos}{check}';
+                break;
+            default:
+                $format = '{type}{length}{notnull}{default}{unique}{comment}{append}{pos}{check}';
+        }
+
+        return \strtr($this->buildCompleteString($format), ['{name}' => $columnName]);
     }
 }
