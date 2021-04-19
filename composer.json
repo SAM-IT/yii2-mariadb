@@ -31,7 +31,10 @@
         }
     ],
     "require": {
-        "php": ">= 7.4"
+        "php": ">= 7.4",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "yiisoft/yii2": "~2.0.14"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.5",
