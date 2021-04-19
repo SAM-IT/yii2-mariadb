@@ -67,10 +67,10 @@ jobs:
         run: composer test -- --coverage-clover coverage.xml --coverage-text
       - name: Get Ocular
         run: wget https://scrutinizer-ci.com/ocular.phar
-        if: matrix.php == '7.4' and github.event_name == 'push'
+        if: matrix.php == '7.4' && github.event_name == 'push'
       - name: Push code coverage
         run: php ocular.phar code-coverage:upload --format=php-clover coverage.xml
-        if: matrix.php == '7.4' and github.event_name == 'push'
+        if: matrix.php == '7.4' && github.event_name == 'push'
   release:
     name: Automated release
     needs: [test, cs]
