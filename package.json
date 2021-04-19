@@ -3,9 +3,9 @@
   "description": "N/A",
   "private": true,
   "devDependencies": {
-    "@commitlint/config-conventional": "^11.0.0",
-    "commitlint": "^11.0.0",
-    "conventional-changelog-conventionalcommits": "^4.5.0",
-    "semantic-release": "^17.2.3"
+    "@commitlint/config-conventional": "^12",
+    "commitlint": "^12",
+    "conventional-changelog-conventionalcommits": "^4.5",
+    "semantic-release": "^17.4"
   }
 }
