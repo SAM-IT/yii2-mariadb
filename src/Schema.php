@@ -12,7 +12,7 @@ class Schema extends \yii\db\mysql\Schema
 {
     public function createQueryBuilder(): QueryBuilder
     {
-        \Yii::createObject(QueryBuilder::class, [$this->db]);
+        return \Yii::createObject(QueryBuilder::class, [$this->db]);
     }
 
     /**
