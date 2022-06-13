@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 
@@ -25,7 +26,7 @@ class JsonExpressionBuilder extends \yii\db\mysql\JsonExpressionBuilder
         $value = $expression->getValue();
 
         if ($value instanceof Query) {
-            list ($sql, $params) = $this->queryBuilder->build($value, $params);
+            list($sql, $params) = $this->queryBuilder->build($value, $params);
             return "($sql)";
         }
 

@@ -28,7 +28,7 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     strategy:
       matrix:
-        php: ['7.4', '8.0']
+        php: ['7.4', '8.0', '8.1']
     steps:
       - uses: actions/checkout@v2
       - name: Set up PHP
@@ -79,9 +79,13 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
-      - run: npm ci
-        name: Install NPM dependencies for semantic-release
-      - run: $(npm bin)/semantic-release
+          node-version: '16.x'
+      - run: >
+          npx
+          -p "@semantic-release/commit-analyzer"
+          -p "@semantic-release/release-notes-generator"
+          -p conventional-changelog-conventionalcommits
+          -p semantic-release
+          -- semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
