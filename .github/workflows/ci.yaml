@@ -64,7 +64,7 @@ jobs:
           PORT: ${{ job.services.mariadb.ports[3306] }}
         run: composer test -- --coverage-clover coverage.xml --coverage-text
       - name: Push code coverage
-        run: $(composer --global config bin-dir --absolute)/php-coveralls coverage.xml
+        run: $(composer global config bin-dir --absolute)/php-coveralls coverage.xml
   release:
     name: Automated release
     needs: [test, cs]
