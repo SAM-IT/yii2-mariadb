@@ -12,9 +12,17 @@
 				<directory>./tests</directory>
 			</testsuite>
 		</testsuites>
-		<filter>
-            <whitelist>
-                <directory suffix=".php">src/</directory>
-            </whitelist>
-		</filter>
+		<coverage
+			includeUncoveredFiles="true"
+		  	processUncoveredFiles="false"
+		>
+			<include>
+				<directory suffix=".php">src</directory>
+			</include>
+			<report>
+			<clover outputFile="clover.xml"/>
+			</report>
+
+
+		</coverage>
 </phpunit>

@@ -35,7 +35,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          tools: pecl
+          tools: pecl, php-coveralls/php-coveralls
           coverage: pcov
       - name: Get composer cache directory
         id: composer-cache
@@ -63,12 +63,8 @@ jobs:
         env:
           PORT: ${{ job.services.mariadb.ports[3306] }}
         run: composer test -- --coverage-clover coverage.xml --coverage-text
-      - name: Get Ocular
-        run: wget https://scrutinizer-ci.com/ocular.phar
-        if: matrix.php == '7.4' && github.event_name == 'push'
       - name: Push code coverage
-        run: php ocular.phar code-coverage:upload --format=php-clover coverage.xml
-        if: matrix.php == '7.4' && github.event_name == 'push'
+        run: $(composer --global config bin-dir)/php-coveralls coverage.xml
   release:
     name: Automated release
     needs: [test, cs]

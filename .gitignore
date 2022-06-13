@@ -1,8 +1,6 @@
-composer.phar
-/vendor/
+/vendor
 composer.lock
 .idea
-/tests/coverage
-/.php_cs.cache
-cghooks.lock
-
+/coverage
+clover.xml
+.phpunit.result.cache
