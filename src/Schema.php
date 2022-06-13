@@ -64,7 +64,7 @@ class Schema extends \yii\db\mysql\Schema
         $this->currentTable = $table->fullName;
         try {
             // Preload JSON columns by checking SQL.
-            $this->jsonColumns[$table->name] = array_merge($this->columnOverrides[$table->fullName] ?? [], $this->getJsonColumns($table));
+            $this->jsonColumns[$this->currentTable] = array_merge($this->columnOverrides[$table->fullName] ?? [], $this->getJsonColumns($table));
             return parent::findColumns($table);
         } catch (Exception $e) {
             $previous = $e->getPrevious();

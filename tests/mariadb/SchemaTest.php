@@ -11,6 +11,7 @@ use yii\db\Expression;
 
 use yii\db\JsonExpression;
 use yii\db\mysql\ColumnSchema;
+use yii\db\TableSchema;
 use yiiunit\data\ar\Storage;
 use yiiunit\framework\db\AnyCaseValue;
 
@@ -31,6 +32,16 @@ class SchemaTest extends TestCase
         /** @var Schema $schema */
         $schema = $this->getConnection()->getSchema();
         $jsonColumns = $schema->getJsonColumns(Storage::getTableSchema());
+        $this->assertSame(['data', 'defaultValue1', 'defaultValue2', 'defaultValue3', 'defaultValue4', 'defaultValue5'], $jsonColumns);
+    }
+
+    public function testGetJsonColumnsFullTableName(): void
+    {
+        /** @var Schema $schema */
+        $schema = $this->getConnection()->getSchema();
+        $tableSchema = $this->getConnection()->getTableSchema("yiitest." . Storage::tableName());
+        $this->assertInstanceOf(TableSchema::class, $tableSchema);
+        $jsonColumns = $schema->getJsonColumns($tableSchema);
         $this->assertSame(['data', 'defaultValue1', 'defaultValue2', 'defaultValue3', 'defaultValue4', 'defaultValue5'], $jsonColumns);
     }
 

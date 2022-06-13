@@ -64,6 +64,7 @@ jobs:
           PORT: ${{ job.services.mariadb.ports[3306] }}
         run: composer test -- --coverage-clover clover.xml --coverage-text
       - name: Push code coverage
+        if: matrix.php == '8.1' && github.event_name == 'push'
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: $(composer global config bin-dir --absolute)/php-coveralls -x clover.xml --json_path=upload.json -v
