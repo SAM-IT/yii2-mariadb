@@ -31,13 +31,13 @@ class ColumnSchemaBuilder extends \yii\db\mysql\ColumnSchemaBuilder
     {
         switch ($this->getTypeCategory()) {
             case self::CATEGORY_PK:
-                $format = '{type}{length}{comment}{append}{pos}{check}';
+                $format = '{type}{length}{comment}{append}{check}{pos}';
                 break;
             case self::CATEGORY_NUMERIC:
-                $format = '{type}{length}{unsigned}{notnull}{default}{unique}{comment}{append}{pos}{check}';
+                $format = '{type}{length}{unsigned}{notnull}{default}{unique}{comment}{append}{check}{pos}';
                 break;
             default:
-                $format = '{type}{length}{notnull}{default}{unique}{comment}{append}{pos}{check}';
+                $format = '{type}{length}{notnull}{default}{unique}{comment}{append}{check}{pos}';
         }
 
         return \strtr($this->buildCompleteString($format), ['{name}' => $columnName]);
