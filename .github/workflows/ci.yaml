@@ -29,7 +29,7 @@ jobs:
           MYSQL_ALLOW_EMPTY_PASSWORD: 1
           MYSQL_ROOT_PASSWORD: ""
           MYSQL_DATABASE: yiitest
-        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=10
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=5s --health-retries=100
     strategy:
       matrix:
         php: ['8.4', '8.5']
