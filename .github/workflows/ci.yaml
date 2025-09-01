@@ -5,11 +5,11 @@ jobs:
     name: Check code style
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: '8.4'
           tools: symplify/easy-coding-standard
       - name: Test code style
         run: ecs
@@ -28,9 +28,9 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     strategy:
       matrix:
-        php: ['7.4', '8.0', '8.1']
+        php: ['8.4', '8.5']
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -73,10 +73,10 @@ jobs:
     needs: [test, cs]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '16.x'
+          node-version: 'lts'
       - run: >
           npx
           -p "@semantic-release/commit-analyzer"
