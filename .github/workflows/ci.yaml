@@ -1,18 +1,22 @@
 name: Continous integration
-on: [push, pull_request]
+on:
+  pull_request:
+  push:
+    branches:
+      - master
 jobs:
   cs:
     name: Check code style
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
-          tools: symplify/easy-coding-standard
+          php-version: '8.4'
+      - uses: ramsey/composer-install@v3
       - name: Test code style
-        run: ecs
+        run: vendor/bin/ecs
   test:
     name: Run tests
     runs-on: ubuntu-latest
@@ -25,29 +29,19 @@ jobs:
           MYSQL_ALLOW_EMPTY_PASSWORD: 1
           MYSQL_ROOT_PASSWORD: ""
           MYSQL_DATABASE: yiitest
-        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+        options: --health-cmd="mariadb-admin ping" --health-interval=5s --health-timeout=5s --health-retries=5
     strategy:
       matrix:
-        php: ['7.4', '8.0', '8.1']
+        php: ['8.4', '8.5']
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           tools: pecl, php-coveralls/php-coveralls
           coverage: pcov
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-      - name: Cache dependencies
-        uses: actions/cache@v1
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ matrix.php }}-composer-
-      - name: Install dependencies
-        run: composer install --prefer-dist
+      - uses: ramsey/composer-install@v3
       - name: Verify MariaDB connection
         env:
           PORT: ${{ job.services.mariadb.ports[3306] }}
@@ -73,10 +67,7 @@ jobs:
     needs: [test, cs]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '16.x'
+      - uses: actions/checkout@v4
       - run: >
           npx
           -p "@semantic-release/commit-analyzer"

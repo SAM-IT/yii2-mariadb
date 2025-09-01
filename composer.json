@@ -31,7 +31,7 @@
         }
     ],
     "require": {
-        "php": ">= 7.4",
+        "php": ">= 8.4",
         "ext-pdo": "*",
         "ext-pdo_mysql": "*",
         "yiisoft/yii2": "> 2.0.14"
@@ -39,7 +39,7 @@
     "require-dev": {
         "yiisoft/yii2-dev": "^2",
         "phpunit/phpunit": "^9",
-        "symplify/easy-coding-standard": "^10.3"
+        "symplify/easy-coding-standard": "^12"
     },
     "scripts": {
         "test": "vendor/bin/phpunit"
