@@ -50,13 +50,13 @@ SQL;
 
         $command = $db->createCommand('SELECT [[int_col]], [[char_col]], [[float_col]], [[blob_col]], [[numeric_col]], [[bool_col]] FROM {{type}}');
 
-//        $command->prepare();
-//        $command->pdoStatement->bindColumn('blob_col', $bc, \PDO::PARAM_LOB);
+        //        $command->prepare();
+        //        $command->pdoStatement->bindColumn('blob_col', $bc, \PDO::PARAM_LOB);
         $row = $command->queryOne();
         $this->assertEquals($intCol, $row['int_col']);
         $this->assertEquals($charCol, $row['char_col']);
         $this->assertEquals($floatCol, (float)$row['float_col']);
-//        $this->assertEquals($floatCol, $row['float_col']);
+        //        $this->assertEquals($floatCol, $row['float_col']);
         $this->assertSame($blobCol, $row['blob_col']);
         $this->assertSame($numericCol, $row['numeric_col']);
         $this->assertSame($boolCol, (bool) $row['bool_col']);
