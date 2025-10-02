@@ -14,11 +14,17 @@ use yii\db\Connection;
  */
 class ColumnSchemaBuilder extends \yii\db\mysql\ColumnSchemaBuilder
 {
+    /**
+     * @var string pattern that is used for the check-clause
+     *             token `{name}` will be replaced with the name of the column
+     */
+    public $checkPattern = "json_valid([[{name}]])";
+
     public function __construct(string $type, $length = null, ?Connection $db = null, array $config = [])
     {
         parent::__construct($type, $length, $db, $config);
         if ($this->isJson()) {
-            $this->check("json_valid([[{name}]])");
+            $this->check($this->checkPattern);
         }
     }
 

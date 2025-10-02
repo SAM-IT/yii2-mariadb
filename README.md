@@ -45,6 +45,25 @@ Append the new Schema class to the `schemaMap` property and set the `driverName`
 ]
 ```
 
+## Modify check condition for the json column
+Update the `columnBuilderSchemaClass` property to modify the check-pattern.
+Keep in mind: pattern must contain `json_valid` (see section [JSON Column detection](#json-column-detection) )
+
+```php
+'db' => [
+    'class' => Connection::class,
+    'schemaMap' => [
+        'mysql' => [
+            'class' => SamIT\Yii2\MariaDb\Schema::class,
+            'columnBuilderSchemaClass' => [
+                'class' => SamIT\Yii2\MariaDb\ColumnSchemaBuilder::class,
+                'checkPattern' => '[[{name}]] is null or json_valid([[{name}]])',
+            ],
+        ]
+    ]
+]
+```
+
 # JSON Column detection
 Since MariaDB has no built-in JSON data type we need to do some extra work to detect JSON columns.
 We do this by parsing the SQL obtained when using `SHOW CREATE TABLE`. Since MariaDB supports `CHECK` constraints these are used to ensure a column can only contain valid JSON.
