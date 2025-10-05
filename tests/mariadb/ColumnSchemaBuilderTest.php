@@ -29,4 +29,14 @@ class ColumnSchemaBuilderTest extends TestCase
         $this->assertInstanceOf(\SamIT\Yii2\MariaDb\ColumnSchemaBuilder::className(), $builder);
         $this->assertStringNotContainsString('{name}', $builder->toString('test'));
     }
+
+    public function testOverwritingConfig(): void
+    {
+        $builder = \Yii::createObject([
+            'class' => ColumnSchemaBuilder::class,
+            'checkPattern' => '[[{name}]] is null or json_valid([[{name}]])',
+        ], ['json', null, $this->getConnection()]);
+
+        $this->assertStringContainsString('[[test]] is null or json_valid([[test]])', $builder->toString('test'));
+    }
 }

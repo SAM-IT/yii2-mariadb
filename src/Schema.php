@@ -17,6 +17,11 @@ class Schema extends \yii\db\mysql\Schema
     }
 
     /**
+     * @var string|class-string|array column schema builder class or class config
+     */
+    public string|array $columnBuilderSchemaClass = ColumnSchemaBuilder::class;
+
+    /**
      * @var string[][] Outer array uses the table name as key
      */
     private array $jsonColumns = [];
@@ -98,6 +103,6 @@ class Schema extends \yii\db\mysql\Schema
 
     public function createColumnSchemaBuilder($type, $length = null)
     {
-        return new ColumnSchemaBuilder($type, $length, $this->db);
+        return \Yii::createObject($this->columnBuilderSchemaClass, [$type, $length, $this->db]);
     }
 }
