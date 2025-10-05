@@ -19,7 +19,7 @@ class Schema extends \yii\db\mysql\Schema
     /**
      * @var string|class-string|array column schema builder class or class config
      */
-    public $columnBuilderSchemaClass = ColumnSchemaBuilder::class;
+    public string|array $columnBuilderSchemaClass = ColumnSchemaBuilder::class;
 
     /**
      * @var string[][] Outer array uses the table name as key

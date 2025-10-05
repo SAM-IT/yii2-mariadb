@@ -30,7 +30,7 @@ class ColumnSchemaBuilderTest extends TestCase
         $this->assertStringNotContainsString('{name}', $builder->toString('test'));
     }
 
-    public function testOverwritingConfig()
+    public function testOverwritingConfig(): void
     {
         $builder = \Yii::createObject([
             'class' => ColumnSchemaBuilder::class,
