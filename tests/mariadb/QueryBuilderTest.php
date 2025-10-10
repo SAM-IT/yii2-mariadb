@@ -62,6 +62,11 @@ class QueryBuilderTest extends TestCase
             'abc' => $columnSchemaBuilder
         ]);
         $this->assertStringContainsString($columnSchemaBuilder->toString('abc'), $sql);
+
+        $sqlFromTypeConstant = $builder->createTable(Storage::tableName(), [
+            'abc' => Schema::TYPE_JSON
+        ]);
+        $this->assertEquals($sql, $sqlFromTypeConstant);
     }
 
     public function testExpressionBuilders(): void
