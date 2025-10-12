@@ -47,6 +47,9 @@ class QueryBuilder extends \yii\db\mysql\QueryBuilder
     public function createTable($table, $columns, $options = null)
     {
         foreach ($columns as $name => &$type) {
+            if ($type === \yii\db\Schema::TYPE_JSON) {
+                $type = $this->db->schema->createColumnSchemaBuilder(\yii\db\Schema::TYPE_JSON);
+            }
             if ($type instanceof ColumnSchemaBuilder && \is_string($name)) {
                 $type = $type->toString($name);
             }
